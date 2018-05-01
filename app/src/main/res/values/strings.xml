@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">TMDB</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_filter">Filter by date</string>
+    <string name="error_401">Invalid API key: You must be granted a valid key.</string>
+    <string name="error_402">The resource you requested could not be found.</string>
+    <string name="internet_fail">Please check your network connection. swipe down to refresh page.</string>
+    <string name="title_activity_movie_details">MovieDetailsActivity</string>
+</resources>
