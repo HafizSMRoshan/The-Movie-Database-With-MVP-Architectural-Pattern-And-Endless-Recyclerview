@@ -68,6 +68,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesView, Ite
 
     }
 
+    //    initialize objects
     private void initObjects() {
 
         this.movieAdapter = new MovieAdapter(this.movies, this, MoviesActivity.this);
@@ -75,6 +76,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesView, Ite
 
     }
 
+    //    destroying object
     private void destroyObjects() {
 
         this.movies.clear();
@@ -85,6 +87,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesView, Ite
 
     }
 
+    //    initializing views
     private void initViews() {
 
         this.rv_movie = (RecyclerView) findViewById(R.id.rv_movie);
@@ -123,6 +126,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesView, Ite
 
     }
 
+    /* Presenter resume and destroy as activity lifecycle */
     @Override
     protected void onResume() {
         super.onResume();
@@ -160,6 +164,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesView, Ite
         return super.onOptionsItemSelected(item);
     }
 
+    //    date filter dialog
     private void showDateFilterDialog() {
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -246,6 +251,8 @@ public class MoviesActivity extends AppCompatActivity implements MoviesView, Ite
 
     }
 
+    /* callback of MoviesView */
+
     @Override
     public void showProgress() {
         progressBar.setVisibility(View.VISIBLE);
@@ -268,6 +275,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesView, Ite
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
+    //    movie list item click listener
     @Override
     public void onClickItem(Movie movie) {
         startActivity(new Intent(MoviesActivity.this, MovieDetailsActivity.class)
