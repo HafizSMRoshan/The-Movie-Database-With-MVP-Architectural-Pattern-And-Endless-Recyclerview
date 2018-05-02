@@ -1,16 +1,21 @@
 package com.task.tmdb.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -20,15 +25,20 @@ import com.task.tmdb.adapters.MovieAdapter;
 import com.task.tmdb.beans.Movie;
 import com.task.tmdb.implementers.GetMoviesInteractorImpl;
 import com.task.tmdb.implementers.MoviesPresenterImpl;
-import com.task.tmdb.interactors.GetMoviesInteractor;
 import com.task.tmdb.interfaces.ItemClickListener;
 import com.task.tmdb.presenters.MoviesPresenter;
+import com.task.tmdb.utilities.Util;
 import com.task.tmdb.views.MoviesView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.task.tmdb.utilities.Util.BUNDLES;
+import static com.task.tmdb.utilities.Util.MOVIES;
 import static com.task.tmdb.utilities.Util.MOVIE_DETAIL;
+import static com.task.tmdb.utilities.Util.compareDate;
+import static com.task.tmdb.utilities.Util.getSelectedDate;
 
 /**
  * Created by HSM Roshan on 02/05/2018.
@@ -141,10 +151,99 @@ public class MoviesActivity extends AppCompatActivity implements MoviesView, Ite
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_filter) {
+
+            showDateFilterDialog();
+
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showDateFilterDialog() {
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.date_filter_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+        final EditText et_start_date = (EditText) dialogView.findViewById(R.id.et_start_date);
+        et_start_date.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // TODO Auto-generated method stub
+                //do your stuff here..
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    getSelectedDate(MoviesActivity.this, new Util.SelectDateListener() {
+                        @Override
+                        public void onSelectDate(String date) {
+                            et_start_date.setText(date);
+                        }
+                    });
+                }
+                return false;
+            }
+        });
+
+        final EditText et_end_date = (EditText) dialogView.findViewById(R.id.et_end_date);
+        et_end_date.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // TODO Auto-generated method stub
+                //do your stuff here..
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    getSelectedDate(MoviesActivity.this, new Util.SelectDateListener() {
+                        @Override
+                        public void onSelectDate(String date) {
+                            et_end_date.setText(date);
+                        }
+                    });
+                }
+                return false;
+            }
+        });
+
+        dialogBuilder.setTitle(getResources().getString(R.string.filter_by_date));
+        dialogBuilder.setPositiveButton(getResources().getString(R.string.done), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String startDate = et_start_date.getText().toString();
+                String endDate = et_end_date.getText().toString();
+
+                if (compareDate(startDate, endDate)) {
+
+                    if (movieAdapter != null
+                            && movieAdapter.getMovies(startDate, endDate) != null
+                            && movieAdapter.getMovies(startDate, endDate).size() > 0) {
+
+                        Bundle args = new Bundle();
+                        args.putSerializable(MOVIES, (Serializable) movieAdapter.getMovies(startDate, endDate));
+
+                        startActivity(new Intent(MoviesActivity.this, MovieFilterActivity.class)
+                                .putExtra(BUNDLES, args));
+
+                    } else {
+
+                        Toast.makeText(MoviesActivity.this, MoviesActivity.this.getResources().getString(R.string.movie_error), Toast.LENGTH_LONG).show();
+
+                    }
+
+                } else {
+                    Toast.makeText(MoviesActivity.this, getResources().getString(R.string.date_error), Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+        dialogBuilder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //pass
+            }
+        });
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+
     }
 
     @Override

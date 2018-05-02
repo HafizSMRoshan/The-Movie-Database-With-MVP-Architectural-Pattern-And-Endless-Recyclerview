@@ -15,7 +15,10 @@ import com.task.tmdb.beans.Movie;
 import com.task.tmdb.interfaces.ItemClickListener;
 import com.task.tmdb.services.MovieService;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.task.tmdb.utilities.Util.isDateWithinRange;
 
 /**
  * Created by HSM Roshan on 02/05/2018.
@@ -27,7 +30,7 @@ public class MovieAdapter extends EndlessRecyclerViewAdapter<Movie, MovieAdapter
 
     ItemClickListener itemClickListener;
 
-    public MovieAdapter(List<Movie> movies, Context context,  ItemClickListener itemClickListener) {
+    public MovieAdapter(List<Movie> movies, Context context, ItemClickListener itemClickListener) {
         super(movies, context);
         this.mContext = context;
         this.itemClickListener = itemClickListener;
@@ -83,6 +86,22 @@ public class MovieAdapter extends EndlessRecyclerViewAdapter<Movie, MovieAdapter
         public void onClick(View view) {
             itemClickListener.onClickItem(data.get(getAdapterPosition()));
         }
+    }
+
+    public List<Movie> getMovies(String startDate, String endDate) {
+
+        List<Movie> dateFilteredMovies = new ArrayList<>();
+
+        for (int i = 0; i < data.size(); i++) {
+            Movie movie = data.get(i);
+
+            if (movie.getReleaseDate() != null && !movie.getReleaseDate().equals(""))
+                if (isDateWithinRange(movie.getReleaseDate(), startDate, endDate)) {
+                    dateFilteredMovies.add(movie);
+                }
+        }
+
+        return dateFilteredMovies;
     }
 
     public class FooterViewHolder extends RecyclerView.ViewHolder {

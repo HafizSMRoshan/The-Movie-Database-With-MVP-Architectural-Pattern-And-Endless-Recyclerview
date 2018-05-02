@@ -6,4 +6,14 @@
     <string name="error_402">The resource you requested could not be found.</string>
     <string name="internet_fail">Please check your network connection. swipe down to refresh page.</string>
     <string name="title_activity_movie_details">MovieDetailsActivity</string>
+    <string name="title_activity_movie_filter">MovieFilterActivity</string>
+    <string name="movie_error">No movie found.</string>
+    <string name="movie_details_error">Movie details not found.</string>
+    <string name="select_start_date">Select start date</string>
+    <string name="select_end_date">Select end date</string>
+    <string name="ok">OK</string>
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+    <string name="filter_by_date">Filter movies by date</string>
+    <string name="date_error">Please select end date after start date.</string>
 </resources>

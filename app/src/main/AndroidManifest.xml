@@ -33,6 +33,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.task.tmdb.activities.MoviesActivity" />
         </activity>
+        <activity
+            android:name=".activities.MovieFilterActivity"
+            android:label="@string/title_activity_movie_filter"
+            android:parentActivityName=".activities.MoviesActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.task.tmdb.activities.MoviesActivity" />
+        </activity>
     </application>
 
 </manifest>
